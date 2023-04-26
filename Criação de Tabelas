@@ -1,0 +1,49 @@
+import psycopg2
+
+conn = psycopg2.connect(
+    host="localhost",
+    database="AulaQuarta",
+    user="postgres",
+    password="postgres"
+)
+
+with conn.cursor() as cur:
+    cur.execute("""
+        CREATE TABLE Cliente (
+            Cliente_ID SERIAL PRIMARY KEY,
+            Cliente_nome VARCHAR(100) NOT NULL
+        );
+    """)
+    
+    cur.execute("""
+        CREATE TABLE Produto (
+            
+            ID_Produto SERIAL PRIMARY KEY,
+            Nome_Produto INTEGER,
+            Preço_Produto INTEGER,
+            Estoque_Produto INTEGER
+        );
+    """)
+
+
+    cur.execute("""
+        CREATE TABLE Compra (
+            Compra_id SERIAL PRIMARY KEY,
+            ID_Cliente INTEGER REFERENCES Cliente(Cliente_id),
+            ID_Produto INTEGER REFERENCES Produto(ID_Produto),
+            Quantidade INTEGER,
+            Valor_Total INTEGER,
+            "Timestamp" timestamp default CURRENT_TIMESTAMP(0)
+        );
+    """)
+    
+    # cur.execute("""
+    #     CREATE TABLE Produto (
+            
+    #         ID_Produto SERIAL PRIMARY KEY,
+    #         Nome_Produto INTEGER,
+    #         Preço_Produto INTEGER,
+    #         Estoque_Produto INTEGER
+    #     );
+    # """)
+    conn.commit()
